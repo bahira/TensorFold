@@ -17,6 +17,10 @@ On NVIDIA GPUs (DGX Spark), the same contract with CUDA kernels:
 - [Adding a CUDA family](adding-a-cuda-family.md): the engine interface, the exactness tests, measuring.
 - [GLM-5.3-Flash](glm-5.3-flash.md): two Sparks, CUDA only.
 
+On a CPU box (no Mac, no NVIDIA GPU):
+
+- [SuperSpear CPU kernels](spear-cpu.md): AVX-512 champion GELU/SiLU, VNNI int8 GEMV, n-gram drafts.
+
 ## The contract
 
 A multi-row step verifies several consecutive positions in one forward. It is exact when every row gets the

@@ -229,6 +229,7 @@ src/tensorfold/
   kernels/qwen/dense/v1/        Qwen3.8 dense lane kernels
   kernels/qwen/flash_next/v1/   Qwen3.8 Flash Next fused kernels
   kernels/nemotron/lightning/v1/  Nemotron 3.5 Lightning fused kernels
+  kernels/spear/v1/             SuperSpear champion GELU/SiLU + AVX-512/VNNI CPU kernels
   drafters/              the DFlash2 drafter
   families/<name>/       one package per model family: forward pass and draft heads
   families/<name>/cuda/  the family's CUDA engine and kernels (NVIDIA GPUs)
@@ -249,6 +250,17 @@ pytest
 The kernel tests of the lane engine need an M5-generation GPU and are skipped elsewhere. The CUDA engines'
 tests in `tests/cuda/` run where PyTorch sees an NVIDIA GPU (inside NVIDIA's container: `pip install pytest`
 first) and are skipped elsewhere.
+
+On a CPU box (no Mac, no NVIDIA GPU) the SuperSpear kernels still run:
+
+```bash
+tensorfold bench-cpu --model tiny
+```
+
+They compile AVX-512 C on first use: SuperSpear's champion GELU/SiLU/sigmoid (from
+[superspear](https://github.com/bahira/superspear)) plus a VNNI int8 GEMV, and they decode tiny GPT-2 / SwiGLU
+models with TensorFold's keyed sampler and n-gram drafts. Numbers and the method:
+[the SPEAR CPU recipe](docs/recipes/spear-cpu.md).
 
 ## License
 
