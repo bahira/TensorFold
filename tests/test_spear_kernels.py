@@ -86,6 +86,12 @@ def test_ngram_drafts_match_serial():
     assert serial["new"] == drafted["new"]
 
 
+def test_cuda_module_imports_without_gpu():
+    from tensorfold.kernels.spear.v1 import cuda as spear_cuda
+
+    assert spear_cuda.available() in (True, False)
+
+
 def test_tiny_swiglu_runs():
     out = generate(tiny_swiglu(act="fast"), list(range(4, 20)), 4,
                    sampling=Sampling(seed=0, temperature=0.0))

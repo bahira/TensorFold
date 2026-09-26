@@ -262,6 +262,15 @@ They compile AVX-512 C on first use: SuperSpear's champion GELU/SiLU/sigmoid (fr
 models with TensorFold's keyed sampler and n-gram drafts. Numbers and the method:
 [the SPEAR CPU recipe](docs/recipes/spear-cpu.md).
 
+On a notebook NVIDIA GPU (no Spark required):
+
+```bash
+tensorfold bench-cuda
+```
+
+Triton, no nvcc. The measurement that matters is fused SwiGLU against `F.silu(gate)*up`, plus a
+DistilGPT2-shaped net. [the SPEAR CUDA recipe](docs/recipes/spear-cuda.md).
+
 ## License
 
 MIT. See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md). Each model keeps its own license;

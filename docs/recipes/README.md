@@ -21,6 +21,10 @@ On a CPU box (no Mac, no NVIDIA GPU):
 
 - [SuperSpear CPU kernels](spear-cpu.md): AVX-512 champion GELU/SiLU, VNNI int8 GEMV, n-gram drafts.
 
+On a notebook NVIDIA GPU (Triton, no Spark):
+
+- [SuperSpear CUDA kernels](spear-cuda.md): fused SwiGLU vs `F.silu`, tiny GPT-2 / SwiGLU decode.
+
 ## The contract
 
 A multi-row step verifies several consecutive positions in one forward. It is exact when every row gets the

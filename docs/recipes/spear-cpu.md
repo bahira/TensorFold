@@ -84,3 +84,6 @@ The same ones SPEAR's own paper records:
   hits, and they never change the bytes.
 - `alg` / `fast` are not bit-identical to `erf`/`exp`. MSE on N(0,1.5) is in the table. Use
   `exact` when you are checking quality; use `alg` when you are decoding.
+
+On a notebook NVIDIA GPU the same champions run as Triton: [SPEAR CUDA](spear-cuda.md).
+Elementwise vs `F.silu` is usually a wash there; fused SwiGLU is the measurement that can win.

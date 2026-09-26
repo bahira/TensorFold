@@ -22,7 +22,7 @@ from typing import Any
 
 from tensorfold import __version__
 
-COMMANDS = ("serve", "pull", "models", "info", "update", "bench-cpu")
+COMMANDS = ("serve", "pull", "models", "info", "update", "bench-cpu", "bench-cuda")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -112,6 +112,11 @@ def build_parser() -> argparse.ArgumentParser:
     bench.add_argument("--model", default="tiny", help="tiny | distilgpt2 | all")
     bench.add_argument("--output", default="docs/recipes/spear-cpu-results.json")
     bench.set_defaults(func=cmd_bench_cpu)
+
+    bench_cuda = commands.add_parser("bench-cuda", help="benchmark SuperSpear CUDA kernels (notebook NVIDIA GPU)")
+    bench_cuda.add_argument("--tokens", type=int, default=32, help="decode tokens per tiny-model run")
+    bench_cuda.add_argument("--output", default="docs/recipes/spear-cuda-results.json")
+    bench_cuda.set_defaults(func=cmd_bench_cuda)
     return parser
 
 
@@ -220,6 +225,13 @@ def cmd_bench_cpu(args: argparse.Namespace) -> int:
     from tensorfold.kernels.spear.v1.bench import main as bench_main
 
     argv = ["--tokens", str(args.tokens), "--model", args.model, "--output", args.output]
+    return int(bench_main(argv) or 0)
+
+
+def cmd_bench_cuda(args: argparse.Namespace) -> int:
+    from tensorfold.kernels.spear.v1.bench_cuda import main as bench_main
+
+    argv = ["--tokens", str(args.tokens), "--output", args.output]
     return int(bench_main(argv) or 0)
 
 

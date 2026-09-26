@@ -8,4 +8,7 @@ numbers: [the SPEAR CPU recipe](../../../../../docs/recipes/spear-cpu.md).
 from tensorfold.kernels.spear import v1 as spear
 y = spear.act("gelu_alg", x)          # evolved algebraic, no erf
 y = spear.gemv_i8(spear.pack_i8(W), x)  # VNNI int8
+
+from tensorfold.kernels.spear.v1 import cuda as spear_cuda
+y = spear_cuda.swiglu(gate, up, silu="silu_alg")  # Triton, notebook GPU
 ```
