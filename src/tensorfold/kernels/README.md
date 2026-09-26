@@ -5,6 +5,8 @@
 | Qwen3.8 dense | `qwen/dense/v1/` | `v1` |
 | Qwen3.8 Flash Next | `qwen/flash_next/v1/` | `v1` |
 | NVIDIA Nemotron 3.5 Lightning | `nemotron/lightning/v1/` | `v1` |
+| CPU (any small GPT-2 / SwiGLU) | `spear/v1/` | `v1` |
+| NVIDIA GPU (notebook, Triton) | `spear/v1/cuda.py` | `v1` |
 
 Each folder contains the kernels the matching family imports. `v1` names this implementation, not the model
 release. A later incompatible implementation gets its own `v2` folder, and the family changes its import to

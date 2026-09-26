@@ -22,7 +22,7 @@ from typing import Any
 
 from tensorfold import __version__
 
-COMMANDS = ("serve", "pull", "models", "info", "update")
+COMMANDS = ("serve", "pull", "models", "info", "update", "bench-cpu", "bench-cuda")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -106,6 +106,18 @@ def build_parser() -> argparse.ArgumentParser:
     info = commands.add_parser("info", help="show which family serves a model (reads its config.json only)")
     info.add_argument("model", help="a Hugging Face repo id or a model directory")
     info.set_defaults(func=cmd_info)
+
+    bench = commands.add_parser("bench-cpu", help="benchmark SuperSpear CPU kernels on tiny models")
+    bench.add_argument("--tokens", type=int, default=32, help="decode tokens per tiny-model run")
+    bench.add_argument("--model", default="tiny", help="tiny | distilgpt2 | all")
+    bench.add_argument("--output", default="docs/recipes/spear-cpu-results.json")
+    bench.set_defaults(func=cmd_bench_cpu)
+
+    bench_cuda = commands.add_parser("bench-cuda", help="benchmark SuperSpear CUDA kernels (notebook NVIDIA GPU)")
+    bench_cuda.add_argument("--tokens", type=int, default=32, help="decode tokens per tiny-model run")
+    bench_cuda.add_argument("--quick", action="store_true", help="smaller buffers, skip 768-wide nets")
+    bench_cuda.add_argument("--output", default="docs/recipes/spear-cuda-results.json")
+    bench_cuda.set_defaults(func=cmd_bench_cuda)
     return parser
 
 
@@ -208,6 +220,22 @@ def _engines(family: Any) -> str:
     if hasattr(family.package, "cuda_engine"):
         found.append("CUDA engine")
     return ", ".join(found) or "no engine"
+
+
+def cmd_bench_cpu(args: argparse.Namespace) -> int:
+    from tensorfold.kernels.spear.v1.bench import main as bench_main
+
+    argv = ["--tokens", str(args.tokens), "--model", args.model, "--output", args.output]
+    return int(bench_main(argv) or 0)
+
+
+def cmd_bench_cuda(args: argparse.Namespace) -> int:
+    from tensorfold.kernels.spear.v1.bench_cuda import main as bench_main
+
+    argv = ["--tokens", str(args.tokens), "--output", args.output]
+    if getattr(args, "quick", False):
+        argv.append("--quick")
+    return int(bench_main(argv) or 0)
 
 
 def cmd_info(args: argparse.Namespace) -> int:

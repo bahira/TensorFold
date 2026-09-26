@@ -1,0 +1,353 @@
+{
+  "features": {
+    "avx512": true,
+    "vnni": true,
+    "compiled": true
+  },
+  "info": "spear kernels: avx512, vnni, compiled (python 3.11.2)",
+  "host": {
+    "omp": "2"
+  },
+  "activations": [
+    {
+      "op": "gelu",
+      "n": 1048576,
+      "ns_elem_exact": 15.640421104431848,
+      "ns_elem_alg": 0.6999826908100741,
+      "ns_elem_fast": 0.6085558414451689,
+      "speedup_alg": 22.344011230237054,
+      "speedup_fast": 25.70088073970292,
+      "mse_alg": 0.0010058642365038395,
+      "mse_fast": 0.005415413528680801
+    },
+    {
+      "op": "silu",
+      "n": 1048576,
+      "ns_elem_exact": 4.03375921249156,
+      "ns_elem_alg": 0.6480380058254946,
+      "ns_elem_fast": 0.6428962230685484,
+      "speedup_alg": 6.224571979159169,
+      "speedup_fast": 6.274355125681712,
+      "mse_alg": 0.0004850124823860824,
+      "mse_fast": 0.008943936787545681
+    },
+    {
+      "op": "sigmoid",
+      "n": 1048576,
+      "ns_elem_exact": 3.9417744159702965,
+      "ns_elem_alg": null,
+      "ns_elem_fast": 0.6779614925337373,
+      "speedup_alg": null,
+      "speedup_fast": 5.81415679117519,
+      "mse_alg": null,
+      "mse_fast": 0.001110387616790831
+    }
+  ],
+  "gemv": {
+    "N": 3072,
+    "K": 768,
+    "ns_numpy": 170696.20000711438,
+    "ns_avx": 239511.99999601158,
+    "speedup_avx_vs_numpy": 0.7126832893965933,
+    "ns_vnni": 74603.2000051855,
+    "speedup_vnni_vs_numpy": 2.2880546678326086,
+    "speedup_vnni_vs_avx": 3.2104789067943953,
+    "cos_i8": 0.9999434351921082,
+    "max_abs_i8": 0.022609412670135498
+  },
+  "mlp": {
+    "shape": "768-3072-768",
+    "ns_fp32_exact": 425416.749990859,
+    "ns_int8_spear": 180714.99999905427,
+    "speedup": 2.3540754779242747
+  },
+  "tiny": [
+    {
+      "model": "gpt2-gelu",
+      "label": "fp32-exact",
+      "act": "exact",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11640651099992283,
+      "tok_s": 137.44935624787007,
+      "tok_s_all": [
+        136.16,
+        137.45,
+        142.44
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-gelu",
+      "label": "fp32-spear-alg",
+      "act": "alg",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.12285815600000659,
+      "tok_s": 130.23148418407925,
+      "tok_s_all": [
+        160.75,
+        130.23,
+        130.02
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-gelu",
+      "label": "fp32-spear-fast",
+      "act": "fast",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11682055799997215,
+      "tok_s": 136.96219461649733,
+      "tok_s_all": [
+        126.34,
+        136.96,
+        152.89
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-gelu",
+      "label": "int8-spear-alg",
+      "act": "alg",
+      "quant": true,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11606415500000368,
+      "tok_s": 137.85479246369815,
+      "tok_s_all": [
+        137.85,
+        145.96,
+        137.12
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-gelu",
+      "label": "int8-spear-alg-ngram",
+      "act": "alg",
+      "quant": true,
+      "drafts": 4,
+      "tokens": 16,
+      "seconds": 0.11289904099999147,
+      "tok_s": 141.71953860973193,
+      "tok_s_all": [
+        134.91,
+        145.53,
+        141.72
+      ],
+      "rounds": 4,
+      "accepted": 12,
+      "proposed": 12,
+      "accept_rate": 1.0
+    },
+    {
+      "model": "llama-swiglu",
+      "label": "fp32-exact",
+      "act": "exact",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11460903600004714,
+      "tok_s": 139.60504824413164,
+      "tok_s_all": [
+        141.76,
+        139.61,
+        139.08
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "llama-swiglu",
+      "label": "fp32-spear-alg",
+      "act": "alg",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11846308099995896,
+      "tok_s": 135.0631763494784,
+      "tok_s_all": [
+        132.98,
+        135.06,
+        135.54
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "llama-swiglu",
+      "label": "fp32-spear-fast",
+      "act": "fast",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.11676659599993401,
+      "tok_s": 137.02548972147002,
+      "tok_s_all": [
+        135.09,
+        137.03,
+        139.26
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "llama-swiglu",
+      "label": "int8-spear-alg",
+      "act": "alg",
+      "quant": true,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.12205651800002215,
+      "tok_s": 131.08681340554952,
+      "tok_s_all": [
+        131.09,
+        129.86,
+        137.08
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "llama-swiglu",
+      "label": "int8-spear-alg-ngram",
+      "act": "alg",
+      "quant": true,
+      "drafts": 4,
+      "tokens": 16,
+      "seconds": 0.13126634099990042,
+      "tok_s": 121.88958630310368,
+      "tok_s_all": [
+        124.97,
+        121.89,
+        121.84
+      ],
+      "rounds": 4,
+      "accepted": 12,
+      "proposed": 12,
+      "accept_rate": 1.0
+    },
+    {
+      "check": "drafts_byte_identical",
+      "ok": true,
+      "serial": [
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47
+      ],
+      "drafted": [
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47,
+        47
+      ]
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "fp32-exact",
+      "act": "exact",
+      "quant": false,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.23843450000003938,
+      "tok_s": 67.1043829647025,
+      "tok_s_all": [
+        67.89,
+        67.1,
+        60.76
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "int8-spear-alg",
+      "act": "alg",
+      "quant": true,
+      "drafts": 0,
+      "tokens": 16,
+      "seconds": 0.1928402290000122,
+      "tok_s": 82.9702395758874,
+      "tok_s_all": [
+        68.2,
+        82.97,
+        92.72
+      ],
+      "rounds": 16,
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "int8-spear-alg-ngram",
+      "act": "alg",
+      "quant": true,
+      "drafts": 4,
+      "tokens": 16,
+      "seconds": 0.16534212399994885,
+      "tok_s": 96.76904840054522,
+      "tok_s_all": [
+        96.77,
+        98.54,
+        95.69
+      ],
+      "rounds": 7,
+      "accepted": 9,
+      "proposed": 28,
+      "accept_rate": 0.32142857142857145
+    }
+  ]
+}

@@ -154,6 +154,24 @@ forcing it to load.
 - The checkpoint is rejected: compare its quantization and draft head with the [model notes](README.md#models).
 - A client cannot connect: keep `serve` running, check `/health`, and confirm its base URL and model ID.
 
+## Notebook NVIDIA GPU (SuperSpear CUDA)
+
+The 27B CUDA engines need a Spark. On a laptop GPU, run the SuperSpear Triton benches (no nvcc):
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[test]"
+pip install torch   # the CUDA build from pytorch.org, matching the driver
+nvidia-smi
+tensorfold bench-cuda           # full: activations, fused SwiGLU, 768×4 decode
+tensorfold bench-cuda --quick   # smaller buffers if VRAM is tight
+```
+
+`bench-cuda` exits 2 if PyTorch does not see a GPU. Results go to `docs/recipes/spear-cuda-results.json`.
+What the numbers mean: [SPEAR CUDA recipe](docs/recipes/spear-cuda.md). A 4 GB card is enough; do not pull
+the 27B checkpoints onto the notebook.
+
 ## DGX Spark
 
 TensorFold's CUDA engine serves Qwen3.8-27B (one or two Sparks), Qwen3.8 Flash Next (one or two Sparks) and

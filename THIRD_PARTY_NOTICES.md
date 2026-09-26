@@ -26,6 +26,15 @@ licensed under the Apache License, Version 2.0; the license text is in
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt). The same helpers are in mlx-vlm's
 `models/qwen4_exp/language.py` (MIT License, Copyright (c) 2025 Prince Canuma).
 
+## SuperSpear champion kernels
+
+`src/tensorfold/kernels/spear/v1/` compiles closed-form GELU, SiLU and sigmoid
+replacements discovered by [SPEAR](https://github.com/bahira/superspear) (MIT
+License, Copyright (c) 2026 bahira). The formulas are taken from that project's
+ledger (`gelu.json`, `silu.json`, `sigmoid.json`) and
+`validation/gelu_policy_generated.py`. TensorFold's AVX-512 / VNNI C is original;
+the algebra is SPEAR's.
+
 ## CUDA engines
 
 On Linux the CUDA engines use [PyTorch](https://github.com/pytorch/pytorch) (BSD-3-Clause) and
