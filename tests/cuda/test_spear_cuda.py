@@ -46,3 +46,13 @@ def test_tiny_swiglu_greedy_and_drafts():
     b = generate(tiny_gpu(act="alg"), prompt, 8, sampling=sampling, drafts=4, ngram=ngram)
     assert a["new"] == b["new"]
     assert len(a["new"]) == 8
+
+
+def test_warmup_and_fp16_swiglu():
+    spear_cuda.warmup()
+    g = torch.randn(8, 1024, device="cuda", dtype=torch.float16)
+    u = torch.randn(8, 1024, device="cuda", dtype=torch.float16)
+    y = spear_cuda.swiglu(g, u, silu="silu_alg")
+    assert y.shape == g.shape and y.dtype == torch.float16
+    y2 = spear_cuda.act("gelu_fast", g)
+    assert y2.dtype == torch.float16

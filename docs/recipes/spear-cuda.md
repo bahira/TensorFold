@@ -7,13 +7,16 @@ and tiny GPT-2 / SwiGLU decode with TensorFold's keyed sampler and n-gram drafts
 ```bash
 # on the notebook, with PyTorch+CUDA
 pip install -e ".[test]"
-# torch with CUDA, if it is not already there
 pip install torch --index-url https://download.pytorch.org/whl/cu128   # pick your CUDA
 
-tensorfold bench-cuda
+nvidia-smi
+tensorfold bench-cuda           # full
+tensorfold bench-cuda --quick   # skip 768-wide nets if VRAM is tight
 ```
 
-It refuses to start without `torch.cuda.is_available()`. Raw JSON:
+It refuses to start without `torch.cuda.is_available()`. Triton compiles on first use
+into `~/.cache/tensorfold/triton`. If Triton is missing, the same algebra still runs as
+vectorized PyTorch (slower, but the decode contract stays testable). Raw JSON:
 [`spear-cuda-results.json`](spear-cuda-results.json) (written on the machine that ran it).
 
 ## Why this, not the 27B engine

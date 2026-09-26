@@ -1,7 +1,7 @@
 """Notebook CUDA bench: SuperSpear Triton vs fused PyTorch, plus tiny GPU decode.
 
   tensorfold bench-cuda
-  python -m tensorfold.kernels.spear.v1.bench_cuda
+  tensorfold bench-cuda --quick
 """
 
 from __future__ import annotations
@@ -68,14 +68,15 @@ def bench_activations(n: int = 1 << 22) -> list[dict[str, Any]]:
     return rows
 
 
-def bench_swiglu() -> list[dict[str, Any]]:
-    """The kernel that matters: fused silu(gate)*up at decode (M=1) and prefill (M=128)."""
-
+def bench_swiglu(*, quick: bool = False) -> list[dict[str, Any]]:
     import torch
     from tensorfold.kernels.spear.v1 import cuda as spear_cuda
 
+    shapes = ((1, 2048), (1, 4096), (1, 11008), (128, 4096))
+    if quick:
+        shapes = ((1, 4096), (128, 4096))
     rows = []
-    for m, n in ((1, 2048), (1, 4096), (1, 11008), (128, 4096)):
+    for m, n in shapes:
         g = torch.randn(m, n, device="cuda", dtype=torch.float16)
         u = torch.randn(m, n, device="cuda", dtype=torch.float16)
         ns_torch = _median_s(lambda: spear_cuda.torch_swiglu(g, u)) * 1e6
@@ -94,7 +95,7 @@ def bench_swiglu() -> list[dict[str, Any]]:
     return rows
 
 
-def bench_tiny(n_new: int) -> list[dict[str, Any]]:
+def bench_tiny(n_new: int, *, quick: bool = False) -> list[dict[str, Any]]:
     from tensorfold.drafters.draft_ngram import SessionNGram
     from tensorfold.engine.cuda_spear import generate, tiny_gpu
     from tensorfold.engine.exact_sampling import Sampling, seed_for
@@ -108,6 +109,8 @@ def bench_tiny(n_new: int) -> list[dict[str, Any]]:
         ("swiglu-768x4", dict(kind="swiglu", n_layer=4, n_embd=768, n_head=12, n_inner=3072, vocab=512, seq=128)),
         ("gpt2-768x4", dict(kind="gpt2", n_layer=4, n_embd=768, n_head=12, n_inner=3072, vocab=512, seq=128)),
     ]
+    if quick:
+        configs = configs[:1]
     for name, kw in configs:
         for act, drafts, label in (
             ("exact", 0, "fp16-torch"),
@@ -121,7 +124,8 @@ def bench_tiny(n_new: int) -> list[dict[str, Any]]:
             generate(model, prompt, 2, sampling=sampling, drafts=0)
             runs = []
             last = None
-            for _ in range(3):
+            reps = 1 if quick else 3
+            for _ in range(reps):
                 torch.cuda.synchronize()
                 t0 = time.perf_counter()
                 last = generate(model, prompt, n_new, sampling=sampling, drafts=drafts, ngram=ngram)
@@ -136,7 +140,6 @@ def bench_tiny(n_new: int) -> list[dict[str, Any]]:
             }
             rows.append(row)
             print(json.dumps({k: row[k] for k in ("model", "label", "tok_s", "accept_rate")}), flush=True)
-    # drafts == serial
     model = tiny_gpu(kind="swiglu", act="alg")
     a = generate(model, prompt, 12, sampling=Sampling(seed=7, temperature=0.0), drafts=0)
     ngram = SessionNGram(vocab=model.cfg.vocab_size)
@@ -150,6 +153,7 @@ def bench_tiny(n_new: int) -> list[dict[str, Any]]:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--tokens", type=int, default=32)
+    p.add_argument("--quick", action="store_true", help="smaller buffers, skip 768-wide nets")
     p.add_argument("--output", default="docs/recipes/spear-cuda-results.json")
     args = p.parse_args(argv)
     if _need_cuda():
@@ -157,13 +161,16 @@ def main(argv: list[str] | None = None) -> int:
     from tensorfold.kernels.spear.v1 import cuda as spear_cuda
 
     print(spear_cuda.info(), flush=True)
-    result: dict[str, Any] = {"info": spear_cuda.info()}
+    print("compiling Triton champions…", flush=True)
+    spear_cuda.warmup()
+    result: dict[str, Any] = {"info": spear_cuda.info(), "triton": spear_cuda.triton_ok()}
+    n = 1 << 20 if args.quick else 1 << 22
     print("=== activations fp16 (vs F.gelu / F.silu / sigmoid) ===", flush=True)
-    result["activations"] = bench_activations()
+    result["activations"] = bench_activations(n)
     print("=== fused SwiGLU (vs F.silu(g)*u) ===", flush=True)
-    result["swiglu"] = bench_swiglu()
+    result["swiglu"] = bench_swiglu(quick=args.quick)
     print("=== tiny GPU models ===", flush=True)
-    result["tiny"] = bench_tiny(args.tokens)
+    result["tiny"] = bench_tiny(args.tokens, quick=args.quick)
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2, default=str) + "\n")

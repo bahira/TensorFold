@@ -115,6 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     bench_cuda = commands.add_parser("bench-cuda", help="benchmark SuperSpear CUDA kernels (notebook NVIDIA GPU)")
     bench_cuda.add_argument("--tokens", type=int, default=32, help="decode tokens per tiny-model run")
+    bench_cuda.add_argument("--quick", action="store_true", help="smaller buffers, skip 768-wide nets")
     bench_cuda.add_argument("--output", default="docs/recipes/spear-cuda-results.json")
     bench_cuda.set_defaults(func=cmd_bench_cuda)
     return parser
@@ -232,6 +233,8 @@ def cmd_bench_cuda(args: argparse.Namespace) -> int:
     from tensorfold.kernels.spear.v1.bench_cuda import main as bench_main
 
     argv = ["--tokens", str(args.tokens), "--output", args.output]
+    if getattr(args, "quick", False):
+        argv.append("--quick")
     return int(bench_main(argv) or 0)
 
 
