@@ -26,7 +26,10 @@ import time
 from pathlib import Path
 from typing import Any, Sequence
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; best_first_tree and lattice_gain are numpy
+    mx = None
 
 # z-lab's reference MLX implementation of the DFlash2 drafter (MIT; see THIRD_PARTY_NOTICES.md), vendored verbatim
 _VENDOR = Path(__file__).resolve().parent / "vendor" / "z_lab_dflash" / "model_mlx.py"

@@ -13,8 +13,12 @@ reads the same bits.
 
 from __future__ import annotations
 
-import mlx.core as mx
-from mlx_lm.models.cache import KVCache
+try:
+    import mlx.core as mx
+    from mlx_lm.models.cache import KVCache
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; drop_spares runs without it
+    mx = None
+    KVCache = object
 
 
 class AlternatingKVCache(KVCache):

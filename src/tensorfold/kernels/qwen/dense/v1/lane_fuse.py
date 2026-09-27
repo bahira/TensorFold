@@ -32,7 +32,10 @@ from __future__ import annotations
 import hashlib
 from typing import Any
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; the module's constants still describe the kernels
+    mx = None
 
 enabled = False         # the lane decoder uses the stacked groups (off until proven)
 auto_build = True       # a layer's groups are stacked on first use when build() has not run

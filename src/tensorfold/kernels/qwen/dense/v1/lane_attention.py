@@ -37,7 +37,10 @@ from __future__ import annotations
 import os
 from typing import Any, Sequence
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; the module's constants still describe the kernels
+    mx = None
 
 MAX_QUERIES = 128
 TILES_PER_GROUP = int(os.environ.get("TF_ATTN_TILES", "16"))    # 16-row tiles per threadgroup; more tiles spread over grid.z. Each threadgroup

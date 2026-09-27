@@ -18,6 +18,8 @@ It refuses to start without `torch.cuda.is_available()`. Triton compiles on firs
 into `~/.cache/tensorfold/triton`. If Triton is missing, the same algebra still runs as
 vectorized PyTorch (slower, but the decode contract stays testable). Raw JSON:
 [`spear-cuda-results.json`](spear-cuda-results.json) (written on the machine that ran it).
+No NVIDIA GPU at hand? [`spear-cuda-extrapolation.md`](spear-cuda-extrapolation.md) runs the
+same code on CPU torch and extrapolates the GPU numbers from there.
 
 ## Why this, not the 27B engine
 

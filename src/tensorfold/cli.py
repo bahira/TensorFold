@@ -388,16 +388,16 @@ def cmd_serve(args: argparse.Namespace) -> int:
         update.check_in_background()
     config_dir = _config_dir(args.model)
     family = families.detect(config_dir)
-    backend = _backend(args.backend, family)
-    families.require_readable(family, families.read_config(config_dir), backend)
-    _note_untested(family, args.model)
-    required_files = getattr(family.package, "REQUIRED_FILES", {}).get(args.model, ())
     native_context = _model_context(config_dir)
     context = native_context if args.context is None else int(args.context)
     if context < 0:
         raise ValueError("--context must be 0 or a positive token count")
     if native_context and context > native_context:
         raise ValueError(f"--context {context} exceeds this model's {native_context}-token window")
+    backend = _backend(args.backend, family)
+    families.require_readable(family, families.read_config(config_dir), backend)
+    _note_untested(family, args.model)
+    required_files = getattr(family.package, "REQUIRED_FILES", {}).get(args.model, ())
     check = getattr(family.package, "check", None)
     if check is not None:
         check(config_dir)                        # refuse an unsupported checkpoint before downloading its weights

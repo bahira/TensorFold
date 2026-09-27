@@ -36,7 +36,10 @@ from __future__ import annotations
 
 from typing import Any
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; the module's constants still describe the kernels
+    mx = None
 
 MAX_ROWS = 128         # rows the lane kernel accepts in one call
 ROW_BLOCK = 32         # rows per threadgroup above 32 rows (one 32-row op per weight group)
