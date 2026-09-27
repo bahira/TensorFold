@@ -236,6 +236,9 @@ def test_serve_finishes_a_config_only_cache_before_loading(tmp_path, monkeypatch
     monkeypatch.setattr(hub, "cached", lambda repo_id, *, cache_dir=None: snapshot)
     monkeypatch.setattr(hub, "pull", finish)
     monkeypatch.setattr(qwen4_exp, "load", load)
+    # serve must finish the cache before it loads: on a Mac that is the family's load above, on an NVIDIA box the
+    # CUDA entry point instead, so tripwire both with the same stub
+    monkeypatch.setattr("tensorfold.cli._serve_cuda", lambda args, family, model_dir: load(model_dir))
     with pytest.raises(LoadReached):
         main(["serve", "owner/model", "--snapshot-dir", "none"])
     assert pulled == ["owner/model"]

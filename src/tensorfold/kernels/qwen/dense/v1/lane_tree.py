@@ -15,7 +15,10 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Sequence
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; the module's constants still describe the kernels
+    mx = None
 
 MAX_DEPTH = 128         # rows of a window (trees up to 32 rows; chains up to 128)
 MAX_TREE = 32

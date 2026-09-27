@@ -1,0 +1,369 @@
+{
+  "info": {
+    "python": "3.11.2",
+    "machine": "x86_64",
+    "torch": "2.14.0+cu130",
+    "cuda": false,
+    "dram_bw_gibs": 13.6
+  },
+  "activations": [
+    {
+      "op": "gelu",
+      "n": 4194304,
+      "ns_elem_torch": 0.937444686926938,
+      "dtype": "fp16",
+      "ns_elem_alg": 1.1746997833012376,
+      "speedup_alg": 0.7980291647730232,
+      "mse_alg": 0.0008978848927654326,
+      "ns_elem_fast": 0.5529131889207666,
+      "speedup_fast": 1.6954645063843385,
+      "mse_fast": 0.006454163230955601
+    },
+    {
+      "op": "silu",
+      "n": 4194304,
+      "ns_elem_torch": 0.5484907626826172,
+      "dtype": "fp16",
+      "ns_elem_alg": 1.6847276687321882,
+      "speedup_alg": 0.3255664240947465,
+      "mse_alg": 0.00044360896572470665,
+      "ns_elem_fast": 0.5284440517008653,
+      "speedup_fast": 1.0379353517505383,
+      "mse_fast": 0.008966227993369102
+    },
+    {
+      "op": "sigmoid",
+      "n": 4194304,
+      "ns_elem_torch": 0.5369594097159348,
+      "dtype": "fp16",
+      "ns_elem_fast": 0.9811100959975817,
+      "speedup_fast": 0.5472978128616244,
+      "mse_fast": 0.0013748407363891602
+    },
+    {
+      "op": "gelu",
+      "n": 4194304,
+      "ns_elem_torch": 0.41615867615038893,
+      "dtype": "fp32",
+      "ns_elem_alg": 2.852950096163872,
+      "speedup_alg": 0.14586959537426308,
+      "mse_alg": 0.0008995390380732715,
+      "ns_elem_fast": 1.3383076191307228,
+      "speedup_fast": 0.31095890825212397,
+      "mse_fast": 0.006453650072216988
+    },
+    {
+      "op": "silu",
+      "n": 4194304,
+      "ns_elem_torch": 0.5238726139087518,
+      "dtype": "fp32",
+      "ns_elem_alg": 3.9063112735812644,
+      "speedup_alg": 0.13410928551745213,
+      "mse_alg": 0.00044366123620420694,
+      "ns_elem_fast": 1.2967033386174047,
+      "speedup_fast": 0.4040034434301103,
+      "mse_fast": 0.008950836956501007
+    },
+    {
+      "op": "sigmoid",
+      "n": 4194304,
+      "ns_elem_torch": 0.5264940261648539,
+      "dtype": "fp32",
+      "ns_elem_fast": 2.1652102470443197,
+      "speedup_fast": 0.2431606939250168,
+      "mse_fast": 0.001377547043375671
+    }
+  ],
+  "swiglu": [
+    {
+      "M": 1,
+      "N": 2048,
+      "us_torch": 6.762999873899389,
+      "us_fused_exact": 7.018999895080924,
+      "us_fused_alg": 26.80700004020764,
+      "us_fused_fast": 14.777000160393072,
+      "speedup_exact": 0.9635275644667062,
+      "speedup_alg": 0.25228484588934275,
+      "speedup_fast": 0.45767069097192803
+    },
+    {
+      "M": 1,
+      "N": 4096,
+      "us_torch": 6.4060000113386195,
+      "us_fused_exact": 6.820999942647177,
+      "us_fused_alg": 30.965999940235633,
+      "us_fused_fast": 15.286000007108669,
+      "speedup_exact": 0.9391584907201306,
+      "speedup_alg": 0.20687205398508676,
+      "speedup_fast": 0.4190762794949329
+    },
+    {
+      "M": 1,
+      "N": 11008,
+      "us_torch": 11.621999874478206,
+      "us_fused_exact": 12.200000128359534,
+      "us_fused_alg": 43.3140000950516,
+      "us_fused_fast": 19.45500002875633,
+      "speedup_exact": 0.9526229305081944,
+      "speedup_alg": 0.26831970838467906,
+      "speedup_fast": 0.5973785585864708
+    },
+    {
+      "M": 128,
+      "N": 4096,
+      "us_torch": 482.5910000363365,
+      "us_fused_exact": 478.45900007814635,
+      "us_fused_alg": 1262.8820002191787,
+      "us_fused_fast": 544.2870001388656,
+      "speedup_exact": 1.008636058591259,
+      "speedup_alg": 0.38213467287726066,
+      "speedup_fast": 0.8866480366299611
+    }
+  ],
+  "tiny": [
+    {
+      "model": "swiglu-128",
+      "label": "fp16-torch",
+      "act": "exact",
+      "drafts": 0,
+      "tok_s": 1140.043759152205,
+      "tok_s_all": [
+        1140.04,
+        1194.04,
+        1104.02
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 327680,
+      "all_params": 360960,
+      "bytes_token_fp32": 1310720,
+      "bytes_token_fp16": 655360
+    },
+    {
+      "model": "swiglu-128",
+      "label": "fp16-spear-alg",
+      "act": "alg",
+      "drafts": 0,
+      "tok_s": 1066.0894503068025,
+      "tok_s_all": [
+        990.43,
+        1066.09,
+        1106.87
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 327680,
+      "all_params": 360960,
+      "bytes_token_fp32": 1310720,
+      "bytes_token_fp16": 655360
+    },
+    {
+      "model": "swiglu-128",
+      "label": "fp16-spear-fast",
+      "act": "fast",
+      "drafts": 0,
+      "tok_s": 1142.0174745037846,
+      "tok_s_all": [
+        1142.02,
+        1153.09,
+        1129.25
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 327680,
+      "all_params": 360960,
+      "bytes_token_fp32": 1310720,
+      "bytes_token_fp16": 655360
+    },
+    {
+      "model": "swiglu-128",
+      "label": "fp16-spear-alg-ngram",
+      "act": "alg",
+      "drafts": 4,
+      "tok_s": 1058.3122789820115,
+      "tok_s_all": [
+        1061.63,
+        1044.54,
+        1058.31
+      ],
+      "accepted": 25,
+      "proposed": 25,
+      "accept_rate": 1.0,
+      "matmul_params": 327680,
+      "all_params": 360960,
+      "bytes_token_fp32": 1310720,
+      "bytes_token_fp16": 655360
+    },
+    {
+      "model": "swiglu-768x4",
+      "label": "fp16-torch",
+      "act": "exact",
+      "drafts": 0,
+      "tok_s": 95.69745383945536,
+      "tok_s_all": [
+        95.7,
+        82.88,
+        97.98
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 37748736,
+      "all_params": 38148096,
+      "bytes_token_fp32": 150994944,
+      "bytes_token_fp16": 75497472
+    },
+    {
+      "model": "swiglu-768x4",
+      "label": "fp16-spear-alg",
+      "act": "alg",
+      "drafts": 0,
+      "tok_s": 87.8029225866775,
+      "tok_s_all": [
+        87.8,
+        83.36,
+        91.61
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 37748736,
+      "all_params": 38148096,
+      "bytes_token_fp32": 150994944,
+      "bytes_token_fp16": 75497472
+    },
+    {
+      "model": "swiglu-768x4",
+      "label": "fp16-spear-fast",
+      "act": "fast",
+      "drafts": 0,
+      "tok_s": 94.12464024272133,
+      "tok_s_all": [
+        91.69,
+        94.12,
+        94.97
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 37748736,
+      "all_params": 38148096,
+      "bytes_token_fp32": 150994944,
+      "bytes_token_fp16": 75497472
+    },
+    {
+      "model": "swiglu-768x4",
+      "label": "fp16-spear-alg-ngram",
+      "act": "alg",
+      "drafts": 4,
+      "tok_s": 99.25330436421572,
+      "tok_s_all": [
+        99.25,
+        100.34,
+        98.72
+      ],
+      "accepted": 23,
+      "proposed": 33,
+      "accept_rate": 0.696969696969697,
+      "matmul_params": 37748736,
+      "all_params": 38148096,
+      "bytes_token_fp32": 150994944,
+      "bytes_token_fp16": 75497472
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "fp16-torch",
+      "act": "exact",
+      "drafts": 0,
+      "tok_s": 146.06324410673113,
+      "tok_s_all": [
+        143.59,
+        146.06,
+        146.62
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 28311552,
+      "all_params": 28738560,
+      "bytes_token_fp32": 113246208,
+      "bytes_token_fp16": 56623104
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "fp16-spear-alg",
+      "act": "alg",
+      "drafts": 0,
+      "tok_s": 145.679141635968,
+      "tok_s_all": [
+        144.26,
+        145.88,
+        145.68
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 28311552,
+      "all_params": 28738560,
+      "bytes_token_fp32": 113246208,
+      "bytes_token_fp16": 56623104
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "fp16-spear-fast",
+      "act": "fast",
+      "drafts": 0,
+      "tok_s": 147.2621996654011,
+      "tok_s_all": [
+        145.34,
+        147.26,
+        147.77
+      ],
+      "accepted": 0,
+      "proposed": 0,
+      "accept_rate": null,
+      "matmul_params": 28311552,
+      "all_params": 28738560,
+      "bytes_token_fp32": 113246208,
+      "bytes_token_fp16": 56623104
+    },
+    {
+      "model": "gpt2-768x4",
+      "label": "fp16-spear-alg-ngram",
+      "act": "alg",
+      "drafts": 4,
+      "tok_s": 127.22467299565542,
+      "tok_s_all": [
+        122.26,
+        127.22,
+        137.5
+      ],
+      "accepted": 20,
+      "proposed": 45,
+      "accept_rate": 0.4444444444444444,
+      "matmul_params": 28311552,
+      "all_params": 28738560,
+      "bytes_token_fp32": 113246208,
+      "bytes_token_fp16": 56623104
+    },
+    {
+      "check": "drafts_byte_identical",
+      "ok": true
+    }
+  ],
+  "steps": [
+    {
+      "model": "swiglu-128",
+      "ms_forward": 1.3612,
+      "ms_sample": 0.0055
+    },
+    {
+      "model": "swiglu-768x4",
+      "ms_forward": 11.1117,
+      "ms_sample": 0.0036
+    }
+  ]
+}

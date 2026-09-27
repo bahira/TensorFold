@@ -26,7 +26,10 @@ from __future__ import annotations
 import hashlib
 from typing import Any
 
-import mlx.core as mx
+try:
+    import mlx.core as mx
+except ModuleNotFoundError:  # mlx ships for Apple Silicon only; the module's constants still describe the kernels
+    mx = None
 
 # norm_xs, live (2026-09-24): blocks of rounds alternating on 21k contexts, 60.02 -> 58.30 ms a round over 1,500
 # rounds; drafted output byte-identical to serial (drafts off) under it. (Comments inside the source below are part

@@ -2,8 +2,11 @@
 
 import random
 
-import mlx.core as mx
-from mlx_lm.models.cache import KVCache
+import pytest
+
+mx = pytest.importorskip("mlx.core", reason="needs Apple Silicon (MLX)")
+pytest.importorskip("mlx_lm", reason="needs Apple Silicon (MLX)")
+from mlx_lm.models.cache import KVCache  # noqa: E402 - after the skip guard
 
 from tensorfold.engine.alternating_kv import AlternatingKVCache, drop_spares
 from tensorfold.engine.lane_engine import LaneEngine
